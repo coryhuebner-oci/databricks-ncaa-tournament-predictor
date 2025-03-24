@@ -6,6 +6,7 @@ to see if performs better than human-Cory did for the 2025 tournament.
 Before beginning, you'll need the following on your machine
 - Python (3.11.1 or greater)
 - The [Databricks CLI](https://docs.databricks.com/aws/en/dev-tools/cli/install)
+- Optional - [The Databricks Connect VS Code extension](https://docs.databricks.com/aws/en/dev-tools/vscode-ext/install). This helps with establishing connectivity, profile setup, etc. with Databricks if you are using VS Code as your IDE.
 
 ## Local environment setup
 To setup your local environment, run the following:
@@ -14,3 +15,7 @@ even when run as a container.
 2. Activate that environment: `. .venv/bin/activate`
 3. Install this project and its dependencies: `pip install -e .`
 4. Install development dependencies: `pip install '.[dev]'`
+5. Ensure you've [setup a Databricks profile for the Databricks connection](https://docs.databricks.com/aws/en/dev-tools/cli/profiles).
+The app leverages Databricks profile configuration to connect to Databricks
+5. Lastly, setup a .env file or environment variables for configuration values; e.g. you'll need a `DATABRICKS_PROFILE` value holding the name of the Databricks profile you want to use. You can use the [.env.template](./.env.template) file as a reference of configuration
+values required.
