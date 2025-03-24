@@ -1,0 +1,19 @@
+# This is a Databricks asset bundle definition for databricks-ncaa-tournament-predictor.
+# The Databricks extension requires databricks.yml configuration file.
+# See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
+
+bundle:
+  name: databricks-ncaa-tournament-predictor
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://dbc-7be6322b-fcce.cloud.databricks.com
+
+  ## Optionally, there could be 'staging' or 'prod' targets here.
+  #
+  # prod:
+  #   workspace:
+  #     host: https://dbc-7be6322b-fcce.cloud.databricks.com
