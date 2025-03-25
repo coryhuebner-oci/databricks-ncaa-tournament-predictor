@@ -8,6 +8,11 @@ def normalize_na(column: Column) -> Column:
 
 
 def get_cleaned_kaggle_stats(df: DataFrame) -> DataFrame:
+    """Cleanup Kaggle stats data. This includes:
+    1. Renaming columns to be more desriptive & snake cased
+    2. Add lineage columns including the NCAA season for the data
+    3. Standardize N/A fields
+    4. Drop unneeded columns"""
     return (
         df.withColumnsRenamed(
             {
