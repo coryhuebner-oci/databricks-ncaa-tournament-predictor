@@ -5,6 +5,11 @@
 bundle:
   name: databricks-ncaa-tournament-predictor
 
+variables:
+  cluster_id:
+    description: The ID of the cluster used to run this workload
+    default: "0324-160743-i50ijq5g"
+
 artifacts:
   ncaa_tournament_predictor_wheel:
     type: whl
@@ -13,21 +18,17 @@ artifacts:
     build: python -m build --wheel
 
 resources:
-  pipelines:
-    kaggle_stats_pipeline:
-      name: "Kaggle Men's NCAA stats pipeline"
-      catalog: "object_computing"
-      schema: ncaa_mens_basketball
-      continuous: false
-      development: true
-      edition: "advanced"
-      clusters:
-        - label: "default"
-          num_workers: 1
-      libraries:
-        - notebook:
-            path: "./notebooks/kaggle_stats_pipeline.ipynb"
-      channel: "CURRENT"
+  jobs:
+    kaggle_stats_job:
+      name: "Cleanup and Transform Kaggle Stats"
+      tasks:
+        - task_key: "run_kaggle_stats_job"
+          existing_cluster_id: ${var.cluster_id}
+          python_wheel_task:
+            package_name: "ncaa_tournament_predictor.jobs.kaggle_stats"
+            entry_point: "run_job"
+          libraries:
+            - whl: ncaa_tournament_predictor_wheel
 
 targets:
   dev:

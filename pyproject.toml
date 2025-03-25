@@ -10,8 +10,7 @@ dynamic = ["version"]
 dependencies = [
     "build~=1.2.2.post1",
     "hatchling~=1.27.0",
-    "databricks-connect~=16.3.0",
-    "databricks-dlt~=0.3.0",
+    "databricks-connect==16.2.0",
     "python-dotenv~=1.0.1",
     "jupyter~=1.1.1",
     "pandas~=2.2.3", # Installed for DataWrangler VS Code support
