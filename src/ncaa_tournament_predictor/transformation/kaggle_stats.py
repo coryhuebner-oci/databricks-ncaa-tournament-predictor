@@ -1,19 +1,22 @@
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import col, regexp_extract, Column, when
 
+_not_applicable = "N/A"
+
 
 def normalize_na(column: Column) -> Column:
     """Normalize the NA and N/A values to all be consistently N/A"""
-    return when(column == "NA", "N/A").otherwise(column)
+    return when(column == "NA", _not_applicable).otherwise(column)
 
 
 def get_cleaned_kaggle_stats(df: DataFrame) -> DataFrame:
     """Cleanup Kaggle stats data. This includes:
     1. Renaming columns to be more desriptive & snake cased
+    2. Drop all data for teams that didn't make the tournament
     2. Add lineage columns including the NCAA season for the data
     3. Standardize N/A fields
     4. Drop unneeded columns"""
-    return (
+    cleaned_data = (
         df.withColumnsRenamed(
             {
                 "Team": "team",
@@ -59,3 +62,5 @@ def get_cleaned_kaggle_stats(df: DataFrame) -> DataFrame:
         .drop("EFG%")
         .drop("EFGD%")
     )
+    tournament_data = cleaned_data.filter(col("tournament_seed") != _not_applicable)
+    return tournament_data
