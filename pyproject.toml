@@ -8,8 +8,10 @@ description = "A project to try out NCAA tournament predictions using Databricks
 requires-python = "~= 3.12.0"
 dynamic = ["version"]
 dependencies = [
+    "build~=1.2.2.post1",
     "hatchling~=1.27.0",
     "databricks-connect~=16.3.0",
+    "databricks-dlt~=0.3.0",
     "python-dotenv~=1.0.1",
     "jupyter~=1.1.1",
     "pandas~=2.2.3", # Installed for DataWrangler VS Code support
@@ -19,12 +21,10 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "pytest~=8.3.5"
+    "pytest~=8.3.5",
 ]
 
 [tool.hatch.version]
 path = "src/ncaa_tournament_predictor/__about__.py"
-
-[tool.hatch.build.targets.sdist]
 
 [tool.hatch.build.targets.wheel]

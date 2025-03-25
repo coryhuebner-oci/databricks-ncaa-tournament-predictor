@@ -5,6 +5,30 @@
 bundle:
   name: databricks-ncaa-tournament-predictor
 
+artifacts:
+  ncaa_tournament_predictor_wheel:
+    type: whl
+    # TODO - figure out how to make this dynamic
+    path: "."
+    build: python -m build --wheel
+
+resources:
+  pipelines:
+    kaggle_stats_pipeline:
+      name: "Kaggle Men's NCAA stats pipeline"
+      catalog: "object_computing"
+      schema: ncaa_mens_basketball
+      continuous: false
+      development: true
+      edition: "advanced"
+      clusters:
+        - label: "default"
+          num_workers: 1
+      libraries:
+        - notebook:
+            path: "./notebooks/kaggle_stats_pipeline.ipynb"
+      channel: "CURRENT"
+
 targets:
   dev:
     mode: development
@@ -16,8 +40,6 @@ targets:
     mode: production
     workspace:
       host: https://dbc-7be6322b-fcce.cloud.databricks.com
-      # We explicitly deploy to /Workspace/Users/huebnerc@objectcomputing.com to make sure we only have a single copy.
-      root_path: /Workspace/Users/huebnerc@objectcomputing.com/.bundle/${bundle.name}/${bundle.target}
     permissions:
       - user_name: huebnerc@objectcomputing.com
         level: CAN_MANAGE

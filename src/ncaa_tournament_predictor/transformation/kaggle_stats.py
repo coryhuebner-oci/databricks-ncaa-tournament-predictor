@@ -53,14 +53,9 @@ def get_cleaned_kaggle_stats(df: DataFrame) -> DataFrame:
         .withColumn("postseason_result", normalize_na(col("postseason_result")))
         .withColumn("tournament_seed", normalize_na(col("tournament_seed")))
         # Drop RK column as it is only present in 2020 and 2025 datasets
-        .drop("RK")
-        # Drop undocumented fields; assumed to be absolute 3-point numbers. Using percentage fields instead of absolute numbers
-        .drop("3PR")
-        .drop("3PRD")
-        # Drop undocumented fields; assumed to be some version of field goal %, but dropping due to not being in all datasets
-        .drop("EFGD_D")
-        .drop("EFG%")
-        .drop("EFGD%")
+        # Drop undocumented 3PR fields; assumed to be absolute 3-point numbers. Using percentage fields instead of absolute numbers
+        # Drop undocumented EFG; assumed to be some version of field goal %, but dropping due to not being in all datasets
+        .drop("RK", "3PR", "3PRD", "EFGD_D", "EFG%", "EFGD%")
     )
     tournament_data = cleaned_data.filter(col("tournament_seed") != _not_applicable)
     return tournament_data
