@@ -27,3 +27,7 @@ dev = [
 path = "src/ncaa_tournament_predictor/__about__.py"
 
 [tool.hatch.build.targets.wheel]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+addopts = ["--import-mode=importlib"]
