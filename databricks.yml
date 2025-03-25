@@ -13,22 +13,21 @@ variables:
 artifacts:
   ncaa_tournament_predictor_wheel:
     type: whl
-    # TODO - figure out how to make this dynamic
     path: "."
     build: python -m build --wheel
 
-resources:
-  jobs:
-    kaggle_stats_job:
-      name: "Cleanup and Transform Kaggle Stats"
-      tasks:
-        - task_key: "run_kaggle_stats_job"
-          existing_cluster_id: ${var.cluster_id}
-          python_wheel_task:
-            package_name: "ncaa_tournament_predictor.jobs.kaggle_stats"
-            entry_point: "run_job"
-          libraries:
-            - whl: ncaa_tournament_predictor_wheel
+# resources:
+#   jobs:
+#     kaggle_stats_job:
+#       name: "Cleanup and Transform Kaggle Stats"
+#       tasks:
+#         - task_key: "run_kaggle_stats_job"
+#           existing_cluster_id: ${var.cluster_id}
+#           python_wheel_task:
+#             package_name: "ncaa_tournament_predictor.jobs.kaggle_stats"
+#             entry_point: "run_job"
+#           libraries:
+#             - whl: ncaa_tournament_predictor_wheel
 
 targets:
   dev:
