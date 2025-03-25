@@ -12,8 +12,12 @@ targets:
     workspace:
       host: https://dbc-7be6322b-fcce.cloud.databricks.com
 
-  ## Optionally, there could be 'staging' or 'prod' targets here.
-  #
-  # prod:
-  #   workspace:
-  #     host: https://dbc-7be6322b-fcce.cloud.databricks.com
+  prod:
+    mode: production
+    workspace:
+      host: https://dbc-7be6322b-fcce.cloud.databricks.com
+      # We explicitly deploy to /Workspace/Users/huebnerc@objectcomputing.com to make sure we only have a single copy.
+      root_path: /Workspace/Users/huebnerc@objectcomputing.com/.bundle/${bundle.name}/${bundle.target}
+    permissions:
+      - user_name: huebnerc@objectcomputing.com
+        level: CAN_MANAGE

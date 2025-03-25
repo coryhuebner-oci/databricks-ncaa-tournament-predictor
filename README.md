@@ -19,3 +19,9 @@ even when run as a container.
 The app leverages Databricks profile configuration to connect to Databricks
 5. Lastly, setup a .env file or environment variables for configuration values; e.g. you'll need a `DATABRICKS_PROFILE` value holding the name of the Databricks profile you want to use. You can use the [.env.template](./.env.template) file as a reference of configuration
 values required.
+
+## Datasets
+The datasets used to build this predictor are as-follows:
+
+1. [Kaggle NCAA Stats](https://www.kaggle.com/datasets/andrewsundberg/college-basketball-dataset) - Team stats for each season from 2013-2025. 2013-2024 stats are used for model training. 2025 (current season) stats are used as inputs for inference
+2. []
