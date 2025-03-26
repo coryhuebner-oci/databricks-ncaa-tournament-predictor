@@ -1,3 +1,5 @@
+from datetime import date
+
 from pyspark.sql import DataFrame
 
 from ..test_data import get_file_path
@@ -19,3 +21,17 @@ def test_get_cleaned_head_to_head_data_splits_text_into_typed_columns(spark):
     assert "team_1_score" in result.columns
     assert "team_2" in result.columns
     assert "team_2_score" in result.columns
+
+    first_row = result.first()
+    assert first_row["game_date"] == date(2012, 11, 9)
+    assert first_row["team_1"] == "Utah Valley"
+    assert first_row["team_1_score"] == 54
+    assert first_row["team_2"] == "IUPUI"
+    assert first_row["team_2_score"] == 67
+
+    last_row = result.tail(1)[0]
+    assert last_row["game_date"] == date(2023, 12, 19)
+    assert last_row["team_1"] == "Cal St.Dominguez Hills"
+    assert last_row["team_1_score"] == 78
+    assert last_row["team_2"] == "Long Beach St."
+    assert last_row["team_2_score"] == 107

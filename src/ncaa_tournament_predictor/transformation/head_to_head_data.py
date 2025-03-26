@@ -30,11 +30,11 @@ def get_cleaned_head_to_head_data(raw_head_to_head_data: DataFrame) -> DataFrame
         # Game date (positions 1-10)
         get_fixed_width_date_column("game_date", 1, 10),
         # Extract team 1 (positions 12-31)
-        get_fixed_width_text_column("team_1", 12, 24),
+        get_fixed_width_text_column("team_1", 12, 23),
         # Extract team 1 score (positions 33-35)
         get_fixed_width_int_column("team_1_score", 35, 3),
         # Extract team 2 (positions 39-58)
-        get_fixed_width_text_column("team_2", 39, 24),
+        get_fixed_width_text_column("team_2", 39, 23),
         # Extract team 2 score (positions 60-62)
         get_fixed_width_int_column("team_2_score", 62, 3),
     )
