@@ -1,5 +1,6 @@
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import col, regexp_extract, Column, when
+from pyspark.sql.types import IntegerType
 
 _not_applicable = "N/A"
 
@@ -7,6 +8,13 @@ _not_applicable = "N/A"
 def normalize_na(column: Column) -> Column:
     """Normalize the NA and N/A values to all be consistently N/A"""
     return when(column == "NA", _not_applicable).otherwise(column)
+
+
+def parse_seed(column: Column) -> Column:
+    """The tournament seed can either be N/A or an integer
+    Convert N/A to null and stringified integers into actual integers
+    """
+    return when(column == _not_applicable, None).otherwise(column.cast(IntegerType()))
 
 
 def get_cleaned_kaggle_stats(df: DataFrame) -> DataFrame:
@@ -47,15 +55,17 @@ def get_cleaned_kaggle_stats(df: DataFrame) -> DataFrame:
         # Add source file information (including year)
         .withColumn("source_filename", col("_metadata.file_path"))
         .withColumn(
-            "year", regexp_extract(col("_metadata.file_path"), r"cbb(\d{4})\.csv", 1)
+            "year",
+            regexp_extract(col("_metadata.file_path"), r"cbb(\d{4})\.csv", 1).cast(
+                IntegerType()
+            ),
         )
         # Standardize N/A fields
         .withColumn("postseason_result", normalize_na(col("postseason_result")))
-        .withColumn("tournament_seed", normalize_na(col("tournament_seed")))
+        .withColumn("tournament_seed", parse_seed(normalize_na(col("tournament_seed"))))
         # Drop RK column as it is only present in 2020 and 2025 datasets
         # Drop undocumented 3PR fields; assumed to be absolute 3-point numbers. Using percentage fields instead of absolute numbers
         # Drop undocumented EFG; assumed to be some version of field goal %, but dropping due to not being in all datasets
         .drop("RK", "3PR", "3PRD", "EFGD_D", "EFG%", "EFGD%")
     )
-    tournament_data = cleaned_data.filter(col("tournament_seed") != _not_applicable)
-    return tournament_data
+    return cleaned_data

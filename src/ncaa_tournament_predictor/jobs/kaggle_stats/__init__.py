@@ -12,7 +12,7 @@ def write_cleaned_kaggle_stats() -> DataFrame:
         .load(volumes.raw_kaggle_stats)
     )
     cleaned_stats = transformation.get_cleaned_kaggle_stats(raw_kaggle_stats)
-    cleaned_stats.write.format("delta").saveAsTable(
+    cleaned_stats.write.format("delta").option("overwriteSchema", "true").saveAsTable(
         tables.cleaned_kaggle_stats, mode="overwrite"
     )
 

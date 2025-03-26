@@ -1,5 +1,6 @@
+from datetime import date, datetime
 from pyspark.sql import DataFrame, Column
-from pyspark.sql.functions import substring, col, trim, to_date, when
+from pyspark.sql.functions import substring, col, trim, to_date, when, year, month, udf
 from pyspark.sql.types import IntegerType
 
 
@@ -27,6 +28,19 @@ def team_one_won() -> Column:
     return when(col("team_1_score") > "team_2_score", True)
 
 
+@udf(returnType=IntegerType())
+def get_college_season(value: date):
+    """Get the college season for a given file; this handles games played late in the previous year being
+    tied to the next year's college season. E.g. a game played on 11/23/2023 is actually part of the 2024 season.
+    A game played on 03/10/2024 is also part of the 2024 season. A game played on 10/1/2024 is part of the 2025 season
+    """
+    if isinstance(value, datetime):  # If it's a timestamp, extract date
+        value = value.date()
+    if isinstance(value, date):  # Ensure it's a date
+        return value.year + 1 if value.month > 5 else value.year
+    return None  # Handle unexpected types
+
+
 def get_cleaned_head_to_head_data(raw_head_to_head_data: DataFrame) -> DataFrame:
     """Convert raw Kaggle stat text data into a cleaned up DataFrame for easier downstream consumption"""
     # Split columns from fixed-width text files
@@ -47,4 +61,7 @@ def get_cleaned_head_to_head_data(raw_head_to_head_data: DataFrame) -> DataFrame
     ).withColumn(
         "winning_team", when(col("team_1_won"), col("team_1")).otherwise(col("team_2"))
     )
-    return with_winner_fields
+    with_year_field = with_winner_fields.withColumn(
+        "year", get_college_season(col("game_date"))
+    )
+    return with_year_field
