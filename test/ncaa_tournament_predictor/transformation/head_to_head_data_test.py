@@ -21,6 +21,8 @@ def test_get_cleaned_head_to_head_data_splits_text_into_typed_columns(spark):
     assert "team_1_score" in result.columns
     assert "team_2" in result.columns
     assert "team_2_score" in result.columns
+    assert "team_1_won" in result.columns
+    assert "winning_team" in result.columns
 
     first_row = result.first()
     assert first_row["game_date"] == date(2012, 11, 9)
@@ -28,10 +30,14 @@ def test_get_cleaned_head_to_head_data_splits_text_into_typed_columns(spark):
     assert first_row["team_1_score"] == 54
     assert first_row["team_2"] == "IUPUI"
     assert first_row["team_2_score"] == 67
+    assert first_row["team_1_won"] == False
+    assert first_row["winning_team"] == "IUPUI"
 
     last_row = result.tail(1)[0]
     assert last_row["game_date"] == date(2023, 12, 19)
     assert last_row["team_1"] == "Cal St.Dominguez Hills"
-    assert last_row["team_1_score"] == 78
+    assert last_row["team_1_score"] == 107
     assert last_row["team_2"] == "Long Beach St."
-    assert last_row["team_2_score"] == 107
+    assert last_row["team_2_score"] == 98
+    assert last_row["team_1_won"] == True
+    assert last_row["winning_team"] == "Cal St.Dominguez Hills"
