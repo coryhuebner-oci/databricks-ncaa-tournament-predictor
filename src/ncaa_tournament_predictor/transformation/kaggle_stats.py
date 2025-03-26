@@ -1,5 +1,5 @@
 from pyspark.sql import DataFrame
-from pyspark.sql.functions import col, regexp_extract, Column, when
+from pyspark.sql.functions import col, regexp_extract, Column, when, equal_null
 from pyspark.sql.types import IntegerType
 
 _not_applicable = "N/A"
@@ -10,11 +10,15 @@ def normalize_na(column: Column) -> Column:
     return when(column == "NA", _not_applicable).otherwise(column)
 
 
+def na_as_null(column: Column) -> Column:
+    return when(normalize_na(column) == _not_applicable, None).otherwise(column)
+
+
 def parse_seed(column: Column) -> Column:
     """The tournament seed can either be N/A or an integer
     Convert N/A to null and stringified integers into actual integers
     """
-    return when(column == _not_applicable, None).otherwise(column.cast(IntegerType()))
+    return na_as_null(column).cast(IntegerType())
 
 
 def get_cleaned_kaggle_stats(df: DataFrame) -> DataFrame:
@@ -61,7 +65,7 @@ def get_cleaned_kaggle_stats(df: DataFrame) -> DataFrame:
             ),
         )
         # Standardize N/A fields
-        .withColumn("postseason_result", normalize_na(col("postseason_result")))
+        .withColumn("postseason_result", na_as_null(col("postseason_result")))
         .withColumn("tournament_seed", parse_seed(normalize_na(col("tournament_seed"))))
         # Drop RK column as it is only present in 2020 and 2025 datasets
         # Drop undocumented 3PR fields; assumed to be absolute 3-point numbers. Using percentage fields instead of absolute numbers
