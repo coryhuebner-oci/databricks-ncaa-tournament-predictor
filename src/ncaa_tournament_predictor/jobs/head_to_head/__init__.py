@@ -10,8 +10,11 @@ def write_cleaned_head_to_head_data() -> DataFrame:
     cleaned_head_to_head_results = transformation.get_cleaned_head_to_head_data(
         raw_head_to_head_data
     )
-    cleaned_head_to_head_results.write.format("delta").saveAsTable(
-        tables.cleaned_head_to_head_results, mode="overwrite"
+    cleaned_head_to_head_results.write.format("delta").option(
+        "overwriteSchema", "true"
+    ).saveAsTable(
+        tables.cleaned_head_to_head_results,
+        mode="overwrite",
     )
 
 
