@@ -62,6 +62,6 @@ def get_cleaned_head_to_head_data(raw_head_to_head_data: DataFrame) -> DataFrame
         "winning_team", when(col("team_1_won"), col("team_1")).otherwise(col("team_2"))
     )
     with_year_field = with_winner_fields.withColumn(
-        "year", get_college_season(col("game_date"))
+        "college_season", get_college_season(col("game_date"))
     )
     return with_year_field

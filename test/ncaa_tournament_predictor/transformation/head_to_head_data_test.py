@@ -23,7 +23,7 @@ def test_get_cleaned_head_to_head_data_splits_text_into_typed_columns(spark):
     assert "team_2_score" in result.columns
     assert "team_1_won" in result.columns
     assert "winning_team" in result.columns
-    assert "year" in result.columns
+    assert "college_season" in result.columns
 
     # Spot-check a few of the rows with interesting data
     rows = result.collect()
@@ -35,7 +35,7 @@ def test_get_cleaned_head_to_head_data_splits_text_into_typed_columns(spark):
     assert first_row["team_2_score"] == 67
     assert first_row["team_1_won"] == False
     assert first_row["winning_team"] == "IUPUI"
-    assert first_row["year"] == 2013
+    assert first_row["college_season"] == 2013
 
     second_row = rows[1]
     assert second_row["game_date"] == date(2024, 3, 26)
@@ -45,7 +45,7 @@ def test_get_cleaned_head_to_head_data_splits_text_into_typed_columns(spark):
     assert second_row["team_2_score"] == 75
     assert second_row["team_1_won"] == False
     assert second_row["winning_team"] == "Seattle"
-    assert second_row["year"] == 2024
+    assert second_row["college_season"] == 2024
 
     last_row = rows[-1]
     assert last_row["game_date"] == date(2023, 12, 19)
@@ -55,4 +55,4 @@ def test_get_cleaned_head_to_head_data_splits_text_into_typed_columns(spark):
     assert last_row["team_2_score"] == 98
     assert last_row["team_1_won"] == True
     assert last_row["winning_team"] == "Cal St.Dominguez Hills"
-    assert last_row["year"] == 2024
+    assert last_row["college_season"] == 2024

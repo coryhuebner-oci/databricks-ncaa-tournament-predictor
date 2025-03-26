@@ -55,7 +55,7 @@ def get_cleaned_kaggle_stats(df: DataFrame) -> DataFrame:
         # Add source file information (including year)
         .withColumn("source_filename", col("_metadata.file_path"))
         .withColumn(
-            "year",
+            "college_season",
             regexp_extract(col("_metadata.file_path"), r"cbb(\d{4})\.csv", 1).cast(
                 IntegerType()
             ),
