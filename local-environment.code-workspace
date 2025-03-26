@@ -1,0 +1,12 @@
+{
+    "folders": [
+        {
+            "path": "./"
+        }
+    ],
+    "settings": {
+        "python.defaultInterpreterPath": "${workspaceFolder}/.venvs/databricks-ncaa-tournament-predictor-Y0X8jGzL-local-environment/bin/python3",
+        "jupyter.interactiveWindow.cellMarker.codeRegex": "^# COMMAND ----------|^# Databricks notebook source|^(#\\s*%%|#\\s*\\<codecell\\>|#\\s*In\\[\\d*?\\]|#\\s*In\\[ \\])",
+        "jupyter.interactiveWindow.cellMarker.default": "# COMMAND ----------"
+    }
+}

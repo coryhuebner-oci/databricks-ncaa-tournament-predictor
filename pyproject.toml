@@ -1,32 +1,28 @@
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
 
 [project]
 name = "ncaa_tournament_predictor"
 description = "A project to try out NCAA tournament predictions using Databricks"
-requires-python = "~= 3.12.0"
-dynamic = ["version"]
+requires-python = "~=3.12.0"
+version = "0.0.1"
 dependencies = [
     "build~=1.2.2.post1",
-    "hatchling~=1.27.0",
-    "databricks-connect==16.2.0",
     "python-dotenv~=1.0.1",
     "jupyter~=1.1.1",
     "pandas~=2.2.3", # Installed for DataWrangler VS Code support
     "pyarrow~=19.0.1", # Installed directly for DataWrangler VS Code support
     "ipykernel~=6.29.5",
+    "pip~=25.0.1", # Annoying, but needed as Databricks extension relies on pip (no pdm support)
 ]
 
-[project.optional-dependencies]
-dev = [
+[dependency-groups]
+local-environment = [
+    "pyspark~=3.5.5",
     "pytest~=8.3.5",
 ]
-
-[tool.hatch.version]
-path = "src/ncaa_tournament_predictor/__about__.py"
-
-[tool.hatch.build.targets.wheel]
+remote-databricks-cluster = ["databricks-connect==16.2.0",]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
