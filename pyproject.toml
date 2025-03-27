@@ -17,12 +17,18 @@ dependencies = [
     "pip~=25.0.1", # Annoying, but needed as Databricks extension relies on pip (no pdm support)
 ]
 
-[dependency-groups]
+[project.optional-dependencies]
 local-environment = [
     "pyspark~=3.5.5",
     "pytest~=8.3.5",
 ]
-remote-databricks-cluster = ["databricks-connect==16.2.0",]
+remote-databricks-cluster = [
+    "databricks-connect==16.2.0",
+    "databricks-feature-engineering==0.9.0",
+]
+machine-learning = [
+    "databricks-feature-engineering==0.9.0",
+]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]

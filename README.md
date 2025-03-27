@@ -41,6 +41,8 @@ The datasets used to build this predictor are as-follows:
 2. Kenpom Head to Head stats - Head-to-head game results are used for training/testing to validate the picks
 made by the model. These were pulled by manually scraping the free Kenpom text endpoint for each season. E.g. [https://kenpom.com/cbbga13.txt](https://kenpom.com/cbbga13.txt), [https://kenpom.com/cbbga14.txt](https://kenpom.com/cbbga14.txt), etc.
 
+The datasets are filtered to data [prior to March 18, 2025 (the first tournament game)](https://www.ncaa.com/news/basketball-men/article/2025-03-23/2025-march-madness-mens-ncaa-tournament-schedule-dates)
+
 ## Switching between VS Code workspaces
 
 The setup is a bit complicated, but to use VS Code, you'll need to switch between workspaces to get the correct
