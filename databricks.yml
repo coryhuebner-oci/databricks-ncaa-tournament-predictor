@@ -21,12 +21,12 @@ targets:
     mode: development
     default: true
     workspace:
-      host: https://dbc-7be6322b-fcce.cloud.databricks.com
+      host: https://dbc-6ec5c610-07d0.cloud.databricks.com
 
   prod:
     mode: production
     workspace:
-      host: https://dbc-7be6322b-fcce.cloud.databricks.com
+      host: https://dbc-6ec5c610-07d0.cloud.databricks.com
     permissions:
       - user_name: huebnerc@objectcomputing.com
         level: CAN_MANAGE

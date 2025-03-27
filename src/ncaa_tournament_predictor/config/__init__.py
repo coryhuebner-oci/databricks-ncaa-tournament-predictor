@@ -15,3 +15,8 @@ class Config:
     @staticmethod
     def databricks_profile() -> str:
         return get_required("DATABRICKS_PROFILE")
+
+    @staticmethod
+    def databricks_serverless() -> bool:
+        config_value = getenv("DATABRICKS_SERVERLESS")
+        return config_value is not None and config_value.lower() in ["true", 1]

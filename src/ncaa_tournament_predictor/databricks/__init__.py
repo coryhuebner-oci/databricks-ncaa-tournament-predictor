@@ -2,10 +2,12 @@ from databricks.connect import DatabricksSession
 from pyspark.sql import SparkSession
 
 
-def get_databricks_spark_session(profile_name: str | None = None) -> SparkSession:
+def get_databricks_spark_session(
+    profile_name: str | None = None, serverless: bool = False
+) -> SparkSession:
     """Get a Databricks Spark session using the provided profile or the default profile if no profile given"""
-    return (
-        DatabricksSession.builder.profile(profile_name).getOrCreate()
-        if profile_name
-        else DatabricksSession.builder.getOrCreate()
-    )
+    session_builder = DatabricksSession.builder.serverless(serverless)
+    if profile_name:
+        session_builder.profile(profile_name)
+
+    return session_builder.getOrCreate()
