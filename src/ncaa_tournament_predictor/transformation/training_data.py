@@ -1,5 +1,5 @@
 from pyspark.sql import DataFrame
-from pyspark.sql.functions import col
+from pyspark.sql.functions import col, avg
 
 
 def get_training_dataset(
@@ -49,4 +49,34 @@ def get_training_dataset(
         )
         .select(head_to_head_columns + t1_stats_columns + t2_stats_columns)
     )
-    return joined_data
+    with_unneeded_columns_removed = joined_data.drop(
+        "team_1_score",
+        "team_2_score",
+        "winning_team",
+        "college_season",
+        "t1_team",
+        "t1_postseason_result",
+        "t1_source_filename",
+        "t2_team",
+        "t2_postseason_result",
+        "t2_source_filename",
+    )
+
+    avg_field_goal_percentage = team_stats.select(
+        avg(col("effective_field_goal_percentage")).alias(
+            "effective_field_goal_percentage"
+        )
+    ).first()["effective_field_goal_percentage"]
+    with_filled_tournament_seeds = with_unneeded_columns_removed.fillna(
+        0, ["t1_tournament_seed", "t2_tournament_seed"]
+    )
+    with_filled_field_goal_percentages = with_filled_tournament_seeds.fillna(
+        avg_field_goal_percentage,
+        [
+            "t1_effective_field_goal_percentage",
+            "t1_effective_field_goal_percentage_allowed",
+            "t2_effective_field_goal_percentage",
+            "t2_effective_field_goal_percentage_allowed",
+        ],
+    )
+    return with_filled_field_goal_percentages
