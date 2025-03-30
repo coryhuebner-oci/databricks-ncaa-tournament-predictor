@@ -2,10 +2,12 @@ from pyspark.sql import DataFrame
 from pyspark.sql.functions import col, avg
 
 
-def get_training_dataset(
+def get_comparable_features_training_dataset(
     team_stats: DataFrame, head_to_head_results: DataFrame
 ) -> DataFrame:
-    """Combine and transform data sources to create a training dataset for an ML model"""
+    """Combine and transform data sources to create a training dataset for an ML model; this dataset
+    provides calculated columns to compare different features between the two teams in each game
+    """
 
     # h2h = head-to-head
     h2h_alias = "h2h"
@@ -67,11 +69,8 @@ def get_training_dataset(
             "effective_field_goal_percentage"
         )
     ).first()["effective_field_goal_percentage"]
-    # Use the number 20 to represent a team not in the tournament to create
-    # consistent scaling with actual 1-16 seeds
-    non_tournament_team_seed = 20
     with_filled_tournament_seeds = with_unneeded_columns_removed.fillna(
-        non_tournament_team_seed, ["t1_tournament_seed", "t2_tournament_seed"]
+        0, ["t1_tournament_seed", "t2_tournament_seed"]
     )
     with_filled_field_goal_percentages = with_filled_tournament_seeds.fillna(
         avg_field_goal_percentage,

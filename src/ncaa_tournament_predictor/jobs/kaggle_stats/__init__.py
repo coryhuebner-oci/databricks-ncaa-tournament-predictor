@@ -29,4 +29,5 @@ def convert_cleaned_kaggle_stats_to_feature_store(spark: SparkSession):
 def run_job():
     spark = databricks.get_databricks_spark_session()
     write_cleaned_kaggle_stats(spark)
-    convert_cleaned_kaggle_stats_to_feature_store(spark)
+    # Failing on Serverless instances due to [CONFIG_NOT_AVAILABLE] Configuration spark.mlflow.modelRegistryUri is not available] error
+    # convert_cleaned_kaggle_stats_to_feature_store(spark)

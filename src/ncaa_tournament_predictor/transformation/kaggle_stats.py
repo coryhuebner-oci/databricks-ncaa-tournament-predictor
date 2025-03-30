@@ -1,5 +1,5 @@
 from pyspark.sql import DataFrame
-from pyspark.sql.functions import col, regexp_extract, Column, when, equal_null
+from pyspark.sql.functions import col, regexp_extract, Column, when, udf
 from pyspark.sql.types import IntegerType
 
 _not_applicable = "N/A"
@@ -67,6 +67,8 @@ def get_cleaned_kaggle_stats(df: DataFrame) -> DataFrame:
         # Standardize N/A fields
         .withColumn("postseason_result", na_as_null(col("postseason_result")))
         .withColumn("tournament_seed", parse_seed(normalize_na(col("tournament_seed"))))
+        # Add losses field
+        .withColumn("losses", col("games") - col("wins"))
         # Drop RK column as it is only present in 2020 and 2025 datasets
         # Drop undocumented 3PR fields; assumed to be absolute 3-point numbers. Using percentage fields instead of absolute numbers
         # Drop undocumented EFG; assumed to be some version of field goal %, but dropping due to not being in all datasets
